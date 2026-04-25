@@ -13,6 +13,7 @@ public class KnowledgeGraph {
     private final List<Tripleta> tripletas = new ArrayList<>();
     private final Map<String, Set<String>> adjacency = new HashMap<>();
 
+    // Cargar un grafo de conocimiento desde un archivo JSON
     public static KnowledgeGraph loadFromJson(Path file) throws IOException {
         Gson gson = new Gson();
         try (Reader reader = Files.newBufferedReader(file)) {
@@ -30,6 +31,7 @@ public class KnowledgeGraph {
         }
     }
 
+    // Añadir una nueva tripleta al grafo y actualizar sus conexiones
     public void addTripleta(Tripleta tripleta) {
         if (tripleta == null) {
             return;
@@ -38,14 +40,17 @@ public class KnowledgeGraph {
         connectUndirected(tripleta.getS(), tripleta.getO());
     }
 
+    // Obtener tripletas
     public List<Tripleta> getTripletas() {
         return Collections.unmodifiableList(tripletas);
     }
 
+    // Ver si el grafo es disconexo
     public boolean isDisjointGraph() {
         return connectedComponents() > 1;
     }
 
+    // Obtener el número de componentes conexas del grafo
     public int connectedComponents() {
         if (adjacency.isEmpty()) {
             return 0;
@@ -75,6 +80,7 @@ public class KnowledgeGraph {
         return components;
     }
 
+    // Obtener el camino más corto entre dos nodos
     public List<String> shortestPath(String source, String target) {
         if (source == null || target == null || !adjacency.containsKey(source) || !adjacency.containsKey(target)) {
             return List.of();
@@ -107,6 +113,7 @@ public class KnowledgeGraph {
         return List.of();
     }
 
+    // Obtener el lugar de nacimiento de una persona específica
     public Optional<String> birthPlaceOf(String personId) {
         for (Tripleta t : tripletas) {
             if (personId.equals(t.getS()) && "nace_en".equals(t.getP())) {
@@ -116,6 +123,7 @@ public class KnowledgeGraph {
         return Optional.empty();
     }
 
+    // Obtener un conjunto con los lugares de nacimiento de todos los ganadores del Nobel
     public Set<String> birthPlacesOfNobelLaureates() {
         Set<String> nobelPeople = new HashSet<>();
         for (Tripleta t : tripletas) {
@@ -133,6 +141,7 @@ public class KnowledgeGraph {
         return birthPlaces;
     }
 
+    // Encontrar a un físico famoso que haya nacido en la misma ciudad que Albert Einstein
     public Optional<String> famousPhysicistBornInSameCityAsEinstein() {
         String einstein = "persona:Albert Einstein";
         Optional<String> einsteinCity = birthPlaceOf(einstein);
@@ -156,6 +165,7 @@ public class KnowledgeGraph {
         return Optional.empty();
     }
 
+    // Obtener todos los tipos de nodos
     public Set<String> nodeTypes() {
         Set<String> types = new LinkedHashSet<>();
         for (String declaredType : declaredTypes) {
@@ -172,6 +182,7 @@ public class KnowledgeGraph {
         return types;
     }
 
+    // Obtener las rutas patrón necesarias para buscar lugares de nacimiento de Nobeles
     public List<String> requiredTraversalPathsForNobelBirthPlaces() {
         return List.of(
                 "persona --(premio:Nobel)--> anyo",
@@ -179,6 +190,7 @@ public class KnowledgeGraph {
         );
     }
 
+    // Verificar si una relación exacta (sujeto, predicado, objeto) existe en el grafo
     private boolean hasFact(String subject, String predicate, String object) {
         for (Tripleta t : tripletas) {
             if (subject.equals(t.getS()) && predicate.equals(t.getP()) && object.equalsIgnoreCase(t.getO())) {
@@ -188,6 +200,7 @@ public class KnowledgeGraph {
         return false;
     }
 
+    // Verificar si una tripleta representa la obtención de un premio Nobel
     private boolean isNobelRelation(Tripleta t) {
         if (t.getP() == null) {
             return false;
@@ -196,6 +209,7 @@ public class KnowledgeGraph {
                 || ("gana_premio".equals(t.getP()) && "premio:Nobel".equals(t.getO()));
     }
 
+    // Extraer el prefijo de tipo de un nodo y añadirlo al conjunto de tipos
     private void addType(Set<String> types, String nodeValue) {
         if (nodeValue == null || nodeValue.isBlank()) {
             return;
@@ -208,6 +222,7 @@ public class KnowledgeGraph {
         }
     }
 
+    // Conectar dos nodos de forma bidireccional en el mapa de adyacencia
     private void connectUndirected(String a, String b) {
         if (a == null || b == null || a.isBlank() || b.isBlank()) {
             return;
@@ -216,6 +231,7 @@ public class KnowledgeGraph {
         adjacency.computeIfAbsent(b, ignored -> new LinkedHashSet<>()).add(a);
     }
 
+    // Reconstruir el camino final navegando hacia atrás desde el destino hasta el origen
     private List<String> buildPath(String source, String target, Map<String, String> previous) {
         List<String> path = new ArrayList<>();
         String current = target;

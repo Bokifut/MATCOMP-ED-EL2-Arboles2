@@ -16,7 +16,7 @@ public class Main {
         
         // 3.2. Calcular la suma
         int suma1 = arbol1.getSuma();
-        System.out.println("Suma total (getSuma): " + suma1);
+        System.out.println("Suma total: " + suma1);
         
         // 3.3. Verifica que la suma es la misma accediendo en los 3 tipos de recorridos posibles.
         int sumaPre1 = arbol1.getListaPreOrden().stream().mapToInt(Integer::intValue).sum();
@@ -42,7 +42,7 @@ public class Main {
         System.out.println("Camino a 110: " + camino1);
         System.out.println("Longitud de camino a 110: " + (camino1.size() > 0 ? camino1.size() - 1 : 0));
         
-        System.out.println("\n PROGRAMA DE PRUEBA 2 (Inserción Aleatoria)");
+        System.out.println("\nPROGRAMA DE PRUEBA 2 (Inserción Aleatoria)");
         ArbolBinarioDeBusquedaEnteros arbol2 = new ArbolBinarioDeBusquedaEnteros();
         
         // 4.1. Añade los números de 0 a 128 PERO DE MANERA ALEATORIA y sin repetir.
@@ -58,7 +58,7 @@ public class Main {
         
         // 4.2. Calcula la suma
         int suma2 = arbol2.getSuma();
-        System.out.println("Suma total (getSuma): " + suma2);
+        System.out.println("Suma total: " + suma2);
         
         // 4.3. Verifica que la suma es la misma accediendo en los 3 tipos de recorridos posibles.
         int sumaPre2 = arbol2.getListaPreOrden().stream().mapToInt(Integer::intValue).sum();

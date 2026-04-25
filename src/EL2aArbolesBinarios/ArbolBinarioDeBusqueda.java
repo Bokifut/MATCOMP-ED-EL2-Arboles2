@@ -18,8 +18,6 @@ public class ArbolBinarioDeBusqueda<T extends Comparable<T>> {
         }
     }
 
-
-
 // Crear raiz
     protected Nodo raiz;
 
@@ -32,8 +30,6 @@ public class ArbolBinarioDeBusqueda<T extends Comparable<T>> {
     protected ArbolBinarioDeBusqueda(Nodo raiz) {
         this.raiz = raiz;
     }
-
-
 
 // Para saber donde añadir el elemento (nodo) de forma recursiva
     protected Nodo addRecursiva(Nodo nodo, T dato) {
@@ -48,8 +44,6 @@ public class ArbolBinarioDeBusqueda<T extends Comparable<T>> {
         }
         return nodo; 
     }
-
-
 
 // Obtener el grado del árbol
     public int getGrado() {
